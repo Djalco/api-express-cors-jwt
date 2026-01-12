@@ -1,0 +1,50 @@
+const dbConfig =  require('../config');
+
+const {Sequelize ,Op,DataTypes, QueryTypes, where} = require('sequelize');
+const sequelize = new Sequelize(
+    dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
+        host : dbConfig.HOST,
+        dialect: dbConfig.dialect,
+        pool:{
+            max: dbConfig.pool.max,
+            min : dbConfig.pool.min,
+            acquire : dbConfig.pool.acquire,
+            idle :dbConfig.pool.idle
+        },
+        query: {
+            raw : true
+        }
+    }
+)
+
+const profsModel = require('./profsModel')(sequelize,DataTypes)
+const messagesModel = require('./messagesModel')(sequelize,DataTypes)
+const etudiantsModel = require('./etudiantsModel')(sequelize,DataTypes)
+const classesModel = require('./classesModel')(sequelize,DataTypes)
+const profClasseModel = require('./profClasseModel')(sequelize,DataTypes)
+
+// Définir les associations N:N entre profs et classes
+profsModel.belongsToMany(classesModel, {
+    through: profClasseModel,
+    foreignKey: 'profId',
+    otherKey: 'classeId',
+    as: 'classes'
+});
+
+classesModel.belongsToMany(profsModel, {
+    through: profClasseModel,
+    foreignKey: 'classeId',
+    otherKey: 'profId',
+    as: 'profs'
+});
+
+sequelize.sync()
+
+module.exports = {
+    db : sequelize,
+    profsModel : profsModel,
+    messagesModel : messagesModel,
+    etudiantsModel : etudiantsModel,
+    classesModel : classesModel,
+    profClasseModel : profClasseModel,
+}
