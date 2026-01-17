@@ -14,7 +14,7 @@ function buildRoutes(){
     router.route('/profs/:id/classes').post(profsController.assignClasses);
     router.route('/profs/:id/classes').get(profsController.getClasses);
 
-    router.route('/auth').post(profsController.login);
+    router.route('/profs/auth').post(profsController.login);
     return router;
 }
 

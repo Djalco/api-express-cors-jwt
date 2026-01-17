@@ -4,7 +4,7 @@ const JWT_SIGN_SECRET = '9a73539d-798c-4d47-84eb-05b1876269f0';
 module.exports = {
     generateTokenForUser : function (user){
         return jwt.sign({
-            profId : user.id
+            userId : user.id
         },
         JWT_SIGN_SECRET,
         {

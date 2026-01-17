@@ -10,6 +10,8 @@ const profsRouter = require('./routers/profsRouter').router;
 const messageRouter = require('./routers/messagesRouter').router;
 const etudiantsRouter = require('./routers/etudiantsRouter').router;
 const classesRouter = require('./routers/classeRouter').router;
+const usersRouter = require('./routers/usersRouter').router;
+
 
 const app = express();
 
@@ -42,6 +44,7 @@ app.use('/api/v1', profsRouter);
 app.use('/api/v1', etudiantsRouter);
 app.use('/api/v1', messageRouter);
 app.use('/api/v1', classesRouter);
+app.use('/api/v1', usersRouter)
 
 app.get('/', (req, res) => {
     res.send("API REST avec Express");
