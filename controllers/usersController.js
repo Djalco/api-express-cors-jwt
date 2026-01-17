@@ -172,6 +172,9 @@ module.exports = {
                             res.status(200).json({
                                 'status': 'success',
                                 'userId': userFound.id,
+                                'nom': userFound.nom,
+                                'email': userFound.email,
+                                'role': userFound.role,
                                 'token': jwtUtils.generateTokenForUser(userFound)
                             })
                             return;

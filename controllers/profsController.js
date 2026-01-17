@@ -171,6 +171,9 @@ module.exports = {
                         res.status(200).json({
                             'status' : 'succes',
                             'profId' : profFound.id,
+                            'nom': profFound.nom,
+                            'prenom': profFound.prenom,
+                            'role': 'prof',
                             'token' : jwtUtils.generateTokenForUser(profFound)
                         })
                         return;

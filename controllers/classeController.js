@@ -33,7 +33,7 @@ module.exports= {
            
     },
     add: function (req, res) { 
-        let {nom, niveau}= req.body;    
+        let {nom, niveau, description}= req.body;    
         if(nom==null || niveau==null){
             res.status(409).json({
                 'status': 'error',
@@ -43,7 +43,8 @@ module.exports= {
         }   
         classesModel.create({
             nom: nom,
-            niveau: niveau  
+            niveau: niveau,
+            description: description || null
         }).then((data) => {
             res.status(201).json({
                 'status': 'success',
@@ -76,10 +77,11 @@ module.exports= {
     },
     update:function(req,res){
         let id = req.params.id; 
-        let {nom, niveau}= req.body;    
+        let {nom, niveau, description}= req.body;    
         classesModel.update({
             nom: nom,
-            niveau: niveau  
+            niveau: niveau,
+            description: description || null
         },{
             where: { id: id }
         }).then(updated => {    
@@ -187,6 +189,38 @@ module.exports= {
             res.status(500).json({
                 'status': 'error',
                 'message': 'Erreur lors de la récupération'
+            });
+        }
+    },
+    // Obtenir les étudiants d'une classe
+    getEtudiants: async function(req, res) {
+        let classeId = req.params.id;
+
+        try {
+            const classe = await classesModel.findByPk(classeId);
+            if (!classe) {
+                res.status(404).json({
+                    'status': 'error',
+                    'message': 'Classe non trouvée'
+                });
+                return;
+            }
+
+            // Récupérer les étudiants via classeId
+            const { etudiantsModel } = require('../models');
+            const etudiants = await etudiantsModel.findAll({
+                where: { classeId: classeId }
+            });
+
+            res.status(200).json({
+                'status': 'success',
+                'data': etudiants
+            });
+        } catch(err) {
+            console.log('Erreur:', err.message);
+            res.status(500).json({
+                'status': 'error',
+                'message': 'Erreur lors de la récupération des étudiants'
             });
         }
     }   

@@ -15,6 +15,9 @@ function buildRouter() {
     router.route('/classes/:id/profs').post(classeController.assignProfs);
     router.route('/classes/:id/profs').get(classeController.getProfs);
     
+    // Route pour obtenir les étudiants d'une classe
+    router.route('/classes/:id/etudiants').get(classeController.getEtudiants);
+    
     return router;
 
 }

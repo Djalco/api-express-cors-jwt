@@ -9,7 +9,7 @@ function buildRoutes(){
     router.route('/etudiants').post(etudiantsController.add);
     router.route('/etudiants/:id').delete(etudiantsController.delete);
     router.route('/etudiants/:id').put(etudiantsController.update);
-   // router.route('/auth').post(etudiantsController.login);
+    router.route('/etudiants/auth').post(etudiantsController.login);
     return router;
 }
 

@@ -38,7 +38,7 @@ module.exports = {
 
     },
     add: function (req, res) {
-        let { nom, prenom } = req.body;
+        let { nom, prenom, email, classeId } = req.body;
         if (nom == null || prenom == null) {
             res.status(409).json({
                 'status': 'error',
@@ -47,7 +47,12 @@ module.exports = {
             return;
         }   
         etudiantsModel.create(
-            { nom: nom, prenom: prenom }
+            { 
+                nom: nom, 
+                prenom: prenom,
+                email: email || null,
+                classeId: classeId || null
+            }
         ).then((data) => {
             res.status(201).json({
                 'status': 'success',
@@ -63,7 +68,7 @@ module.exports = {
     update: function (req, res) {
         let id = req.params.id;
 
-        let { nom, prenom} = req.body;
+        let { nom, prenom, email, classeId } = req.body;
         if (nom == null || prenom == null ) {
             res.status(409).json({
                 'status': 'error',
@@ -71,28 +76,15 @@ module.exports = {
             });
             return;
         }
-        /* bcrypt.hash(mdp, 5, (err, encrypted) => {
-            etudiantsModel.update(
-                { nom: nom, prenom: prenom, bureau: bureau, mdp: encrypted }, { where: { id: id } }
-            ).then((data) => {
-                if (!data) {
-                    res.status(404).json({
-                        'status': 'error',
-                        'message': 'prof id invalide'
-                    });
-                    return;
-                }
-
-                res.status(204).json({
-                    'status': 'success',
-                    'message': 'prof modifie'
-                });
-            }).catch(err => {
-                console.log('Erreur:', err.message)
-            })
-        }) */
+       
         etudiantsModel.update(
-            { nom: nom, prenom: prenom }, { where: { id: id } }
+            { 
+                nom: nom, 
+                prenom: prenom,
+                email: email || null,
+                classeId: classeId || null
+            }, 
+            { where: { id: id } }
         ).then((data) => {
             if (!data) {
                 res.status(404).json({
@@ -133,40 +125,44 @@ module.exports = {
         })
 
     },
-    /* login: function (req, res) {
-        let { nom, mdp } = req.body;
-        if (nom == null || mdp == null) {
+    // Authentification des étudiants avec email et nom
+    login: function(req, res) {
+        let { email, nom } = req.body;
+        
+        if (email == null || nom == null) {
             res.status(400).json({
                 'status': 'error',
-                'message': 'Donnees incompletes pour authentification'
+                'message': 'Email et nom requis'
             });
             return;
         }
-        etudiantsModel.findOne({ where: { nom: nom } })
-            .then((profFound) => {
-                if (profFound) {
-                    bcrypt.compare(mdp, profFound.mdp, (err, resBcrypt) => {
-                        if (resBcrypt) {
-                            res.status(200).json({
-                                'status': 'succes',
-                                'profId': profFound.id,
-                                'token': jwtUtils.generateTokenForUser(profFound)
-                            })
-                            return;
-                        } else {
-                            res.status(403).json({
-                                status: 'error',
-                                message: 'Donnees de connexion invalides'
-                            })
-                        }
-                    })
+        
+        etudiantsModel.findOne({ where: { email: email, nom: nom } })
+            .then((etudiantFound) => {
+                if (etudiantFound) {
+                    res.status(200).json({
+                        'status': 'success',
+                        'userId': etudiantFound.id,
+                        'nom': etudiantFound.nom,
+                        'prenom': etudiantFound.prenom,
+                        'email': etudiantFound.email,
+                        'role': 'etudiant',
+                        'token': jwtUtils.generateTokenForUser(etudiantFound)
+                    });
                 } else {
                     res.status(403).json({
-                        status: 'error',
-                        message: 'Donnees de connexion invalides'
-                    })
+                        'status': 'error',
+                        'message': 'Email ou nom incorrect'
+                    });
                 }
             })
-    } */
+            .catch(err => {
+                console.log('Erreur:', err.message);
+                res.status(500).json({
+                    'status': 'error',
+                    'message': 'Erreur serveur'
+                });
+            });
+    }
 
 }

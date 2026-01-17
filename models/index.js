@@ -39,6 +39,17 @@ classesModel.belongsToMany(profsModel, {
     as: 'profs'
 });
 
+// Définir la relation 1:N entre classes et étudiants
+classesModel.hasMany(etudiantsModel, {
+    foreignKey: 'classeId',
+    as: 'etudiants'
+});
+
+etudiantsModel.belongsTo(classesModel, {
+    foreignKey: 'classeId',
+    as: 'classe'
+});
+
 sequelize.sync()
 
 module.exports = {
