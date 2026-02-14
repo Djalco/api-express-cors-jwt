@@ -38,9 +38,9 @@ module.exports = {
         
     },
     add: function (req, res) { 
-        let {nom, prenom, bureau,mdp}= req.body;
+        let {nom, prenom, bureau,matiereId,mdp}= req.body;
 
-        if(nom==null || prenom==null || bureau==null || mdp==null){
+        if(nom==null || prenom==null || bureau==null|| matiereId == null|| mdp==null){
             res.status(409).json({
                 'status': 'error',
                 'message': 'Donnees incompletes'
@@ -52,6 +52,7 @@ module.exports = {
                 nom: nom,
                 prenom: prenom,
                 bureau: bureau,
+                matiereId : matiereId,
                 mdp: encrypted
             }).then((data) => {
                 res.status(201).json({
@@ -70,20 +71,19 @@ module.exports = {
     update: function (req, res) { 
         let id = req.params.id;
 
-        let { nom, prenom, bureau, mdp } = req.body;
-        if (nom == null || prenom == null || bureau == null) {
-            res.status(409).json({
-                'status': 'error',
-                'message': 'Donnees incompletes'
-            });
-            return;
-        }
-
+        let { nom, prenom, bureau, mdp , matiereId} = req.body;
+        
         // Si le mot de passe est fourni et non vide, on le met à jour
         if (mdp && mdp.trim() !== '') {
             bcrypt.hash(mdp, 5, (err, encrypted) => {
                 profsModel.update(
-                    { nom: nom, prenom: prenom, bureau: bureau, mdp: encrypted }, 
+                    {   
+                        nom: nom || null, 
+                        prenom: prenom || null, 
+                        bureau: bureau || null, 
+                        mdp: encrypted ,
+                        matiereId : matiereId || null
+                    }, 
                     { where: { id: id } }
                 ).then((data) => {
                     if (!data[0]) {
@@ -109,7 +109,13 @@ module.exports = {
         } else {
             // Mettre à jour sans changer le mot de passe
             profsModel.update(
-                { nom: nom, prenom: prenom, bureau: bureau }, 
+                { 
+                    nom: nom || null, 
+                    prenom: prenom || null, 
+                    bureau: bureau || null,
+                    matiereId : matiereId || null
+                
+                }, 
                 { where: { id: id } }
             ).then((data) => {
                 if (!data[0]) {

@@ -51,6 +51,16 @@ etudiantsModel.belongsTo(classesModel, {
     as: 'classe'
 });
 
+matiereModel.hasMany(profsModel,{
+    foreignKey : 'matiereId',
+    as: 'profs'
+});
+
+profsModel.belongsTo(matiereModel,{
+    foreignKey : 'matiereId',
+    as: 'matieres'
+});
+
 
 sequelize.sync()
 
