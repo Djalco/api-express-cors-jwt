@@ -13,6 +13,25 @@ module.exports = {
                 )
             })
     },
+    getById: function (req, res) {
+        let id = req.params.id;
+        matiereModel.findByPk(id)
+            .then((data) => {
+                if (!data) {
+                    res.status(404).json({
+                        'status': 'error',
+                        'message': 'matiere ' + data + 'invalide'
+                    });
+                }
+                res.status(200).json({
+                    'status': 'succes',
+                    'data': data
+                });
+            }).catch(err => {
+                console.log('Erreur : ', err.message)
+            })
+
+    },
     add: function (req, res) {
         let { nom,coef } = req.body;
         if (nom == null || coef == null) {
