@@ -164,10 +164,10 @@ module.exports = {
        
     },
     login : function(req,res) {
-        let {email,mdp} = req.body;
-        if(email==null || mdp==null){
+        let { email, mdp } = req.body;
+        if (email == null || mdp == null) {
             res.status(400).json({
-                'status' : 'error',
+                'status': 'error',
                 'message': 'Donnees incompletes pour authentification'
             });
             return;
@@ -182,6 +182,7 @@ module.exports = {
                             'profId' : profFound.id,
                             'nom': profFound.nom,
                             'prenom': profFound.prenom,
+                            'email' : profFound.email,
                             'role': 'prof',
                             'token' : jwtUtils.generateTokenForUser(profFound)
                         })
