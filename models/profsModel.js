@@ -3,6 +3,7 @@ module.exports = (sequelize , DataTypes)=>{
         nom: {type : DataTypes.STRING},
         prenom: { type: DataTypes.STRING },
         bureau: { type: DataTypes.INTEGER },
+        email : {type : DataTypes.STRING},
         matiereId: {
             type: DataTypes.INTEGER,
             allowNull: true,

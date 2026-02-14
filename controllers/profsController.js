@@ -38,9 +38,9 @@ module.exports = {
         
     },
     add: function (req, res) { 
-        let {nom, prenom, bureau,matiereId,mdp}= req.body;
+        let {nom, prenom,email, bureau,matiereId,mdp}= req.body;
 
-        if(nom==null || prenom==null || bureau==null|| matiereId == null|| mdp==null){
+        if(nom==null || prenom==null || email== null || bureau==null|| matiereId == null|| mdp==null){
             res.status(409).json({
                 'status': 'error',
                 'message': 'Donnees incompletes'
@@ -51,6 +51,7 @@ module.exports = {
             profsModel.create({
                 nom: nom,
                 prenom: prenom,
+                email : email,
                 bureau: bureau,
                 matiereId : matiereId,
                 mdp: encrypted
@@ -71,7 +72,7 @@ module.exports = {
     update: function (req, res) { 
         let id = req.params.id;
 
-        let { nom, prenom, bureau, mdp , matiereId} = req.body;
+        let { nom, prenom,email, bureau, mdp , matiereId} = req.body;
         
         // Si le mot de passe est fourni et non vide, on le met à jour
         if (mdp && mdp.trim() !== '') {
@@ -80,6 +81,7 @@ module.exports = {
                     {   
                         nom: nom || null, 
                         prenom: prenom || null, 
+                        email : email || null,
                         bureau: bureau || null, 
                         mdp: encrypted ,
                         matiereId : matiereId || null
@@ -112,6 +114,7 @@ module.exports = {
                 { 
                     nom: nom || null, 
                     prenom: prenom || null, 
+                    email: email || null,
                     bureau: bureau || null,
                     matiereId : matiereId || null
                 
@@ -161,15 +164,15 @@ module.exports = {
        
     },
     login : function(req,res) {
-        let {nom,mdp} = req.body;
-        if(nom==null || mdp==null){
+        let {email,mdp} = req.body;
+        if(email==null || mdp==null){
             res.status(400).json({
                 'status' : 'error',
                 'message': 'Donnees incompletes pour authentification'
             });
             return;
         }
-        profsModel.findOne({where : {nom:nom}})
+        profsModel.findOne({where : {email:email}})
         .then((profFound) =>{
             if(profFound){
                 bcrypt.compare(mdp,profFound.mdp,(err,resBcrypt)=>{
