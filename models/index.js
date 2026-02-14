@@ -23,6 +23,7 @@ const etudiantsModel = require('./etudiantsModel')(sequelize,DataTypes)
 const classesModel = require('./classesModel')(sequelize,DataTypes)
 const profClasseModel = require('./profClasseModel')(sequelize,DataTypes)
 const userModel = require('./userModel')(sequelize,DataTypes)
+const matiereModel = require('./matiereModel')(sequelize,DataTypes)
 
 // Définir les associations N:N entre profs et classes
 profsModel.belongsToMany(classesModel, {
@@ -50,6 +51,7 @@ etudiantsModel.belongsTo(classesModel, {
     as: 'classe'
 });
 
+
 sequelize.sync()
 
 module.exports = {
@@ -59,5 +61,6 @@ module.exports = {
     etudiantsModel : etudiantsModel,
     classesModel : classesModel,
     profClasseModel : profClasseModel,
-    userModel : userModel
+    userModel : userModel,
+    matiereModel : matiereModel
 }

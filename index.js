@@ -10,6 +10,7 @@ const profsRouter = require('./routers/profsRouter').router;
 const messageRouter = require('./routers/messagesRouter').router;
 const etudiantsRouter = require('./routers/etudiantsRouter').router;
 const classesRouter = require('./routers/classeRouter').router;
+const matiereRouter = require('./routers/matiereRouter').router;
 const usersRouter = require('./routers/usersRouter').router;
 
 
@@ -44,6 +45,7 @@ app.use('/api/v1', profsRouter);
 app.use('/api/v1', etudiantsRouter);
 app.use('/api/v1', messageRouter);
 app.use('/api/v1', classesRouter);
+app.use('/api/v1',matiereRouter)
 app.use('/api/v1', usersRouter)
 
 app.get('/', (req, res) => {
