@@ -17,7 +17,7 @@ const usersRouter = require('./routers/usersRouter').router;
 
 const app = express();
 
-let whitelist = ['http://localhost:3000'];
+let whitelist = ['http://localhost:3000', 'http://localhost:3001'];
 
 let corsOptions = {
     origin: function (origin, callback) {
@@ -33,7 +33,7 @@ app.use(cors(corsOptions)); // ✅ AVANT LES ROUTES
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-
+ 
 expressOasGenerator.handleResponses(app, {});
 
 const accessLogStream = rfs.createStream('access.log', {
@@ -47,7 +47,7 @@ app.use('/api/v1', etudiantsRouter);
 app.use('/api/v1', messageRouter);
 app.use('/api/v1', classesRouter);
 app.use('/api/v1',matiereRouter);
-app.use('/api/v1',noteRouter);
+//app.use('/api/v1',noteRouter);
 app.use('/api/v1', usersRouter);
 
 app.get('/', (req, res) => {

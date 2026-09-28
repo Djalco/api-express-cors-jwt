@@ -24,7 +24,7 @@ const classesModel = require('./classesModel')(sequelize,DataTypes)
 const profClasseModel = require('./profClasseModel')(sequelize,DataTypes)
 const userModel = require('./userModel')(sequelize,DataTypes)
 const matiereModel = require('./matiereModel')(sequelize,DataTypes)
-const noteModel = require('./noteModel')(sequelize,DataTypes)
+//const noteModel = require('./noteModel')(sequelize,DataTypes)
 
 // Définir les associations N:N entre profs et classes
 profsModel.belongsToMany(classesModel, {
@@ -65,7 +65,7 @@ profsModel.belongsTo(matiereModel,{
 });
 
 
-noteModel.belongsTo(etudiantsModel,{
+/* noteModel.belongsTo(etudiantsModel,{
     foreignKey : 'etudiantId',
     as:'etudiants'
 });
@@ -76,7 +76,7 @@ noteModel.belongsTo(matiereModel,{
 noteModel.belongsTo(profsModel, {
     foreignKey: 'profId',
     as: 'profs'
-});
+}); */
 sequelize.sync()
 
 module.exports = {
@@ -88,5 +88,5 @@ module.exports = {
     profClasseModel : profClasseModel,
     userModel : userModel,
     matiereModel : matiereModel,
-    noteModel : noteModel
+   // noteModel : noteModel
 }
